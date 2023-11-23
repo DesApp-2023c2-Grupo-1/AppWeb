@@ -99,7 +99,7 @@ function App() {
           {[...Array(gridSize)].map((_, rowIndex) => (
             <tr key={rowIndex}>
               {[...Array(gridSize)].map((_, colIndex) => (
-                <td key={colIndex} style={{ border: '1px solid black', width: '30px', height: '30px' }}>
+                <td key={colIndex} style={{ border: '1px solid black', width: '80px', height: '80px' }}>
                   {posicionRobot.row === rowIndex && posicionRobot.col === colIndex &&
                     obtenerFlecha()}
                 </td>
