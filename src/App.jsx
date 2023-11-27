@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Api from './api.js';
 
 function App() {
   const gridSize = 5;
@@ -73,28 +74,37 @@ function App() {
     }
   };
 
-  const handleConsoleCommand = () => {
-    const command = window.prompt('Introduce un comando:');
-    if (command !== null) {
-      switch (command.toUpperCase()) {
-        case 'F':
-          moverRobot('avanzar');
-          break;
-        case 'B':
-          moverRobot('retroceder');
-          break;
-        case 'R':
-          moverRobot('derecha');
-          break;
-        case 'L':
-          moverRobot('izquierda');
-          break;
-        default:
-          alert('Comando no reconocido');
-          break;
+
+  const handleConsoleCommand = async () => {
+
+    const a = await Api.obtenerRegistros()
+    const comandos = a.data.data[0].comandos
+
+    for (let i = 0; i < comandos.length; i++) {
+      console.log(comandos[i])
+      if (comandos[i] !== null) {
+        switch (comandos[i].toUpperCase()) {
+          case 'F':
+            moverRobot('avanzar');
+            break;
+          case 'B':
+            moverRobot('retroceder');
+            break;
+          case 'R':
+            moverRobot('derecha');
+            break;
+          case 'L':
+            moverRobot('izquierda');
+            break;
+          default:
+            alert('Comando no reconocido');
+            break;
+        }
       }
     }
+
   };
+
 
   return (
     <div className="App" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '600px', margin: 'auto', height: '100vh' }}>
