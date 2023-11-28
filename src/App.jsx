@@ -8,28 +8,29 @@ function App() {
   const [posicionRobot, setPosicionRobot] = useState(posicionRobotInicial);
 
   const moverRobot = (direction) => {
-    const nuevaPosicion = { ...posicionRobot };
+    setPosicionRobot((prevPosicion) => {
+      const nuevaPosicion = { ...prevPosicion };
 
-    switch (direction) {
-      case 'avanzar':
-        moverEnDireccion(nuevaPosicion, true);
-        break;
-      case 'retroceder':
-        moverEnDireccion(nuevaPosicion, false);
-        break;
-      case 'derecha':
-        console.log(nuevaPosicion)
-        cambiarOrientacion(nuevaPosicion, 'derecha');
-        break;
-      case 'izquierda':
-        cambiarOrientacion(nuevaPosicion, 'izquierda');
-        break;
-      default:
-        // Comando no reconocido
-        return;
-    }
+      switch (direction) {
+        case 'avanzar':
+          moverEnDireccion(nuevaPosicion, true);
+          break;
+        case 'retroceder':
+          moverEnDireccion(nuevaPosicion, false);
+          break;
+        case 'derecha':
+          cambiarOrientacion(nuevaPosicion, 'derecha');
+          break;
+        case 'izquierda':
+          cambiarOrientacion(nuevaPosicion, 'izquierda');
+          break;
+        default:
+          // Comando no reconocido
+          return prevPosicion;
+      }
 
-    setPosicionRobot(nuevaPosicion);
+      return nuevaPosicion;
+    });
   };
 
   const moverEnDireccion = (posicion, avanza) => {
@@ -85,16 +86,20 @@ function App() {
       if (comandos[i] !== null) {
         switch (comandos[i].toUpperCase()) {
           case 'F':
-            moverRobot('avanzar');
-            break;
-          case 'B':
-            moverRobot('retroceder');
+            await delay(1000); 
+            await moverRobotAsync('avanzar');
             break;
           case 'R':
-            moverRobot('derecha');
+            await delay(1000);
+            await moverRobotAsync('derecha');
             break;
           case 'L':
-            moverRobot('izquierda');
+            await delay(1000);
+            await moverRobotAsync('izquierda');
+            break;
+          case 'B':
+            await delay(1000);
+            await moverRobotAsync('retroceder');
             break;
           default:
             alert('Comando no reconocido');
@@ -102,9 +107,18 @@ function App() {
         }
       }
     }
-
   };
 
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const moverRobotAsync = async (direction) => {
+    return new Promise((resolve) => {
+      moverRobot(direction);
+      setTimeout(() => resolve(), 0);
+    });
+  };
+
+  useEffect(() => {}, [posicionRobot]);
 
   return (
     <div className="App" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: '600px', margin: 'auto', height: '100vh' }}>
