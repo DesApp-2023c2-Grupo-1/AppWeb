@@ -58,10 +58,9 @@ const Robot = () => {
     posicion.orientacion = transicionesOrientacion[posicion.orientacion][nuevaOrientacion];
   };
 
-  const handleConsoleCommand = async () => {
-
+  const obtenerRegistrosSiempre = async () => {
     const a = await Api.obtenerRegistros()
-    const comandos = a.data.data[0].comandos
+    const comandos = a.comandos
 
     for (let i = 0; i < comandos.length; i++) {
       if (comandos[i] !== null) {
@@ -88,7 +87,9 @@ const Robot = () => {
         }
       }
     }
-  };
+    await delay(1000);
+    setPosicionRobot(posicionRobotInicial)
+   };
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -101,20 +102,10 @@ const Robot = () => {
 
   useEffect(() => {}, [posicionRobot]);
 
+  obtenerRegistrosSiempre();
   return (
     <div>
       <Tablero gridSize={gridSize} posicionRobot={posicionRobot} />
-      <button onClick={handleConsoleCommand} style={{
-        padding: '10px 20px',
-        fontSize: '16px',
-        backgroundColor: '#4CAF50',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-      } }>
-        Ejecutar Comando
-      </button>
     </div>
   );
 };
