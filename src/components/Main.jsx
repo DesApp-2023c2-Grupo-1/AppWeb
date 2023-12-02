@@ -59,14 +59,14 @@ const Robot = () => {
   };
 
   const obtenerRegistrosSiempre = async () => {
-    const a = await Api.obtenerRegistros()
-    const comandos = a.comandos
+    const a = await Api.obtenerRegistros();
+    const comandos = a.comandos;
 
     for (let i = 0; i < comandos.length; i++) {
       if (comandos[i] !== null) {
         switch (comandos[i].toUpperCase()) {
           case 'F':
-            await delay(1000); 
+            await delay(1000);
             await moverRobotAsync('avanzar');
             break;
           case 'R':
@@ -88,8 +88,19 @@ const Robot = () => {
       }
     }
     await delay(1000);
+    console.log('Antes: ' + posicionRobot.col + posicionRobot.row + posicionRobot.orientacion);
     setPosicionRobot(posicionRobotInicial)
-   };
+    console.log('Después: ' + posicionRobot.col + posicionRobot.row + posicionRobot.orientacion);
+  };
+
+  const volverAPosicionInicialAsync = async () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setPosicionRobot(posicionRobotInicial);
+        resolve();
+      }, 1000); 
+    });
+  };
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -100,9 +111,10 @@ const Robot = () => {
     });
   };
 
-  useEffect(() => {}, [posicionRobot]);
+  useEffect(() => {
+    obtenerRegistrosSiempre();
+  }, []); 
 
-  obtenerRegistrosSiempre();
   return (
     <div>
       <Tablero gridSize={gridSize} posicionRobot={posicionRobot} />
