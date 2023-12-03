@@ -6,6 +6,7 @@ const Robot = () => {
   const gridSize = 5;
   const posicionRobotInicial = { row: 0, col: 0, orientacion: 'derecha' };
   const [posicionRobot, setPosicionRobot] = useState(posicionRobotInicial);
+  const [comandos, setComandos] = useState([]);
 
   const moverRobot = (direction) => {
     setPosicionRobot((prevPosicion) => {
@@ -60,8 +61,12 @@ const Robot = () => {
 
   const obtenerRegistrosSiempre = async () => {
     const a = await Api.obtenerRegistros();
-    const comandos = a.comandos;
+    const nuevosComandos = a.comandos || [];
 
+    setComandos(nuevosComandos);
+  };
+
+  const ejecutarComandos = async () => {
     for (let i = 0; i < comandos.length; i++) {
       if (comandos[i] !== null) {
         switch (comandos[i].toUpperCase()) {
@@ -87,10 +92,12 @@ const Robot = () => {
         }
       }
     }
+
+    // Restaurar a la posición inicial después de ejecutar todos los comandos
     await delay(1000);
-    console.log('Antes: ' + posicionRobot.col + posicionRobot.row + posicionRobot.orientacion);
-    setPosicionRobot(posicionRobotInicial)
-    console.log('Después: ' + posicionRobot.col + posicionRobot.row + posicionRobot.orientacion);
+    console.log('Antes:', posicionRobot.col, posicionRobot.row, posicionRobot.orientacion);
+    setPosicionRobot(posicionRobotInicial);
+    console.log('Después:', posicionRobot.col, posicionRobot.row, posicionRobot.orientacion);
   };
 
   const volverAPosicionInicialAsync = async () => {
@@ -112,8 +119,16 @@ const Robot = () => {
   };
 
   useEffect(() => {
+    // Ejecutar comandos cada vez que cambie la lista de comandos
     obtenerRegistrosSiempre();
-  }, []); 
+  }, [comandos]);
+
+  // Obtener comandos inicialmente
+  useEffect(() => {
+    if (comandos.length > 0) {
+      ejecutarComandos();
+    }
+  }, [comandos]);
 
   return (
     <div>
