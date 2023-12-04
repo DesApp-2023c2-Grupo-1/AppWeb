@@ -60,8 +60,8 @@ const Robot = () => {
   };
 
   const obtenerRegistrosSiempre = async () => {
-    const a = await Api.obtenerRegistros();
-    const nuevosComandos = a.comandos || [];
+    const registro = await Api.obtenerRegistros();
+    const nuevosComandos = registro.comandos || [];
 
     setComandos(nuevosComandos);
   };
@@ -93,20 +93,9 @@ const Robot = () => {
       }
     }
 
-    // Restaurar a la posición inicial después de ejecutar todos los comandos
+    setComandos([]);
     await delay(1000);
-    console.log('Antes:', posicionRobot.col, posicionRobot.row, posicionRobot.orientacion);
     setPosicionRobot(posicionRobotInicial);
-    console.log('Después:', posicionRobot.col, posicionRobot.row, posicionRobot.orientacion);
-  };
-
-  const volverAPosicionInicialAsync = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setPosicionRobot(posicionRobotInicial);
-        resolve();
-      }, 1000); 
-    });
   };
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -119,11 +108,9 @@ const Robot = () => {
   };
 
   useEffect(() => {
-    // Ejecutar comandos cada vez que cambie la lista de comandos
     obtenerRegistrosSiempre();
   }, [comandos]);
 
-  // Obtener comandos inicialmente
   useEffect(() => {
     if (comandos.length > 0) {
       ejecutarComandos();
