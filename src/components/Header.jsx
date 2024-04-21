@@ -13,7 +13,6 @@ const Header = () => {
         width: '100vw',
         display: 'flex',
         alignItems: 'center',
-        marginTop: '13px'
       }}
     >
       <FaRobot style={{ fontSize: '2.5em' }} />

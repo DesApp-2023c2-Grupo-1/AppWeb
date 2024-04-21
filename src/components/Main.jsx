@@ -119,7 +119,7 @@ const Robot = () => {
   }, [comandos]);
 
   return (
-    <div>
+    <div style={{ margin: '0', padding: '0' }}>
       <Header/>
       <div >
         <Tablero gridSize={gridSize} posicionRobot={posicionRobot} />
