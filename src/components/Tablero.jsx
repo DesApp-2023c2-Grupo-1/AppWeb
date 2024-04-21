@@ -22,8 +22,8 @@ const Tablero = ({ gridSize, posicionRobot }) => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '25px' }}>
-      <div style={{ border: '1px solid black', borderRadius: '10px', padding: '10px', background: 'white' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+      <div style={{ border: '1px solid black', borderRadius: '10px', padding: '10px', background: '#29bfc7' }}>
         <table style={{ borderSpacing: 0 }}>
           <tbody>
             {[...Array(gridSize)].map((_, rowIndex) => (
