@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Tablero from './Tablero';
 import Api from '../api';
 import Header from './Header';
+import Footer from './Footer';
 
 const Robot = () => {
   const gridSize = 5;
@@ -122,6 +123,7 @@ const Robot = () => {
     <div>
       <Header/>
       <Tablero gridSize={gridSize} posicionRobot={posicionRobot} />
+      
     </div>
   );
 };
