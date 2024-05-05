@@ -3,13 +3,30 @@ import Tablero from './Tablero';
 import Api from '../api';
 import Header from './Header';
 import Footer from './Footer';
+import ModalTablero from './ModalTablero';
+import './styles.css';
 
+const tablerosConfig = [
+  { id: 1, gridSize: 6, posicionRobotInicial: { row: 0, col: 0, orientacion: 'derecha' } },
+  { id: 2, gridSize: 6, posicionRobotInicial: { row: 2, col: 3, orientacion: 'abajo' } },
+  { id: 3, gridSize: 6, posicionRobotInicial: { row: 3, col: 5, orientacion: 'izquierda' } }
+];
 
 const Robot = () => {
-  const gridSize = 5;
-  const posicionRobotInicial = { row: 0, col: 0, orientacion: 'derecha' };
-  const [posicionRobot, setPosicionRobot] = useState(posicionRobotInicial);
+  const [tableroActual, setTableroActual] = useState(tablerosConfig[0]);
+  const [posicionRobot, setPosicionRobot] = useState(tableroActual.posicionRobotInicial);
   const [comandos, setComandos] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setPosicionRobot(tableroActual.posicionRobotInicial);
+  }, [tableroActual]);
+
+  const handleSelectTablero = (id) => {
+    const nuevoTablero = tablerosConfig.find(t => t.id === id);
+    setTableroActual(nuevoTablero);
+    setIsModalOpen(false); 
+  };
 
   const moverRobot = (direction) => {
     setPosicionRobot((prevPosicion) => {
@@ -29,7 +46,6 @@ const Robot = () => {
           cambiarOrientacion(nuevaPosicion, 'izquierda');
           break;
         default:
-          // Comando no reconocido
           return prevPosicion;
       }
 
@@ -39,7 +55,7 @@ const Robot = () => {
 
   const moverEnDireccion = (posicion, avanza) => {
     const direccion = posicion.orientacion;
-
+    const gridSize = tableroActual.gridSize;
     const cambios = {
       'abajo': { row: avanza ? 1 : -1, col: 0 },
       'derecha': { row: 0, col: avanza ? 1 : -1 },
@@ -62,72 +78,66 @@ const Robot = () => {
     posicion.orientacion = transicionesOrientacion[posicion.orientacion][nuevaOrientacion];
   };
 
-  const obtenerRegistrosSiempre = async () => {
-    const registro = await Api.obtenerRegistros();
-    const nuevosComandos = registro.comandos || [];
-
-    setComandos(nuevosComandos);
-  };
-
-  const ejecutarComandos = async () => {
-    for (let i = 0; i < comandos.length; i++) {
-      if (comandos[i] !== null) {
-        switch (comandos[i].toUpperCase()) {
-          case 'F':
-            await delay(1000);
-            await moverRobotAsync('avanzar');
-            break;
-          case 'R':
-            await delay(1000);
-            await moverRobotAsync('derecha');
-            break;
-          case 'L':
-            await delay(1000);
-            await moverRobotAsync('izquierda');
-            break;
-          case 'B':
-            await delay(1000);
-            await moverRobotAsync('retroceder');
-            break;
-          default:
-            alert('Comando no reconocido');
-            break;
-        }
-      }
-    }
-
-    setComandos([]);
-    await delay(1000);
-    setPosicionRobot(posicionRobotInicial);
-  };
-
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-  const moverRobotAsync = async (direction) => {
-    return new Promise((resolve) => {
-      moverRobot(direction);
-      setTimeout(() => resolve(), 0);
-    });
-  };
-
   useEffect(() => {
+    const obtenerRegistrosSiempre = async () => {
+      const registro = await Api.obtenerRegistros();
+      const nuevosComandos = registro.comandos || [];
+      setComandos(nuevosComandos);
+    };
+
     obtenerRegistrosSiempre();
   }, [comandos]);
 
   useEffect(() => {
+    const ejecutarComandos = async () => {
+      for (let comando of comandos) {
+        if (comando !== null) {
+          switch (comando.toUpperCase()) {
+            case 'F':
+              await delay(1000);
+              moverRobot('avanzar');
+              break;
+            case 'R':
+              await delay(1000);
+              moverRobot('derecha');
+              break;
+            case 'L':
+              await delay(1000);
+              moverRobot('izquierda');
+              break;
+            case 'B':
+              await delay(1000);
+              moverRobot('retroceder');
+              break;
+            default:
+              alert('Comando no reconocido');
+              break;
+          }
+        }
+      }
+      setComandos([]);
+      await delay(1000);
+      setPosicionRobot(tableroActual.posicionRobotInicial);
+    };
+
     if (comandos.length > 0) {
       ejecutarComandos();
     }
   }, [comandos]);
 
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   return (
     <div style={{ margin: '0', padding: '0' }}>
       <Header/>
-      <div >
-        <Tablero gridSize={gridSize} posicionRobot={posicionRobot} />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+        <Tablero gridSize={tableroActual.gridSize} posicionRobot={posicionRobot} />
+        <div style={{ marginTop: '25px' }}>
+          <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
+        </div>
+        <ModalTablero isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSelectTablero={handleSelectTablero} />
       </div>
       <Footer/>
-      
     </div>
   );
 };
