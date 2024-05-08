@@ -129,16 +129,19 @@ const Robot = () => {
 
   return (
     <div style={{ margin: '0', padding: '0' }}>
-      <Header/>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
-        <Tablero gridSize={tableroActual.gridSize} posicionRobot={posicionRobot} />
-        <div style={{ marginTop: '25px' }}>
-          <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
-        </div>
-        <ModalTablero isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSelectTablero={handleSelectTablero} />
-      </div>
-      <Footer/>
+  <Header />
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px', marginBottom: '60px' }}>
+    <Tablero gridSize={tableroActual.gridSize} posicionRobot={posicionRobot} />
+    <div style={{ marginTop: '25px' }}>
+      <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
     </div>
+    <ModalTablero isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSelectTablero={handleSelectTablero} />
+  </div>
+  <Footer />
+</div>
+    
+     
+    
   );
 };
 
