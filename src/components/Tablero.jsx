@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 
 const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
+  const [draggedCells, setDraggedCells] = useState([]); //Registro de celdas arrastrada de imagen
+
   const handleDrop = (e, row, col) => {
     e.preventDefault();
     const itemType = e.dataTransfer.getData('itemType');
     const itemImage = e.dataTransfer.getData('itemImage');
 
     onDropItem(itemType, itemImage, row, col);
+
+    // Limpiamos el estado de celdas arrastradas
+    setDraggedCells([]);
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e, row, col) => {
     e.preventDefault();
+
+    // Actualizamos el estado de las celdas arrastradas
+    if (!draggedCells.includes(`${row}-${col}`)) {
+      setDraggedCells([...draggedCells, `${row}-${col}`]);
+    }
   };
 
   const renderCell = (row, col) => {
@@ -33,15 +43,19 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
             e.dataTransfer.setData('itemType', item.type);
             e.dataTransfer.setData('itemImage', item.image);
           }}
+          onDragEnd={() => setDraggedCells([])} // Limpiamos el estado de celdas arrastradas al soltar la imagen
         />
       );
     }
+
+    // Verificamos si la celda está en el estado de celdas arrastradas para aplicar el color
+    const isDragged = draggedCells.includes(`${row}-${col}`);
 
     return (
       <div
         key={`${row}-${col}`}
         onDrop={(e) => handleDrop(e, row, col)}
-        onDragOver={handleDragOver}
+        onDragOver={(e) => handleDragOver(e, row, col)}
         className="cell"
         style={{
           width: '85px',
@@ -50,6 +64,7 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor: isDragged ? '#2196f3' : '',
         }}
       >
         {cellContent}
@@ -73,7 +88,7 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
     return grid;
   };
 
-  return <div className="tablero" style={{ display: 'inline-block' }}>{renderGrid()}</div>;
+  return <div className="tablero">{renderGrid()}</div>;
 };
 
 Tablero.propTypes = {
