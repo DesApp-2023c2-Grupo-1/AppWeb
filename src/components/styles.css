@@ -95,3 +95,8 @@
 .close-button:hover {
   background-color: #555;
 }
+
+.robot {
+  width: 80px;
+  height: 80px;
+}
