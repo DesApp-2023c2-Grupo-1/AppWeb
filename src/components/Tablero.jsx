@@ -3,23 +3,34 @@ import PropTypes from 'prop-types';
 import './styles.css';
 
 const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
-  const [draggedCells, setDraggedCells] = useState([]); //Registro de celdas arrastrada de imagen
+  const [draggedCells, setDraggedCells] = useState([]);
 
   const handleDrop = (e, row, col) => {
     e.preventDefault();
+
+    // Verificar si la celda ya tiene una imagen o si es la posición del robot
+    if (items.some(item => item.row === row && item.col === col) ||
+        (posicionRobot.row === row && posicionRobot.col === col)) {
+      return; // No hacer nada si la celda ya está ocupada
+    }
+
     const itemType = e.dataTransfer.getData('itemType');
     const itemImage = e.dataTransfer.getData('itemImage');
+    const itemId = e.dataTransfer.getData('itemId');
 
-    onDropItem(itemType, itemImage, row, col);
-
-    // Limpiamos el estado de celdas arrastradas
+    onDropItem(itemType, itemImage, row, col, itemId);
     setDraggedCells([]);
   };
 
   const handleDragOver = (e, row, col) => {
     e.preventDefault();
 
-    // Actualizamos el estado de las celdas arrastradas
+    // No permitir arrastrar sobre una celda ocupada o la posición del robot
+    if (items.some(item => item.row === row && item.col === col) ||
+        (posicionRobot.row === row && posicionRobot.col === col)) {
+      return;
+    }
+
     if (!draggedCells.includes(`${row}-${col}`)) {
       setDraggedCells([...draggedCells, `${row}-${col}`]);
     }
@@ -30,8 +41,8 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
     const isRobotHere = posicionRobot.row === row && posicionRobot.col === col;
 
     let cellContent = null;
-    if (isRobotHere) {     
-        cellContent = '🤖';
+    if (isRobotHere) {
+      cellContent = '🤖';
     } else if (item) {
       cellContent = (
         <img
@@ -42,13 +53,13 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
           onDragStart={(e) => {
             e.dataTransfer.setData('itemType', item.type);
             e.dataTransfer.setData('itemImage', item.image);
+            e.dataTransfer.setData('itemId', item.id);
           }}
-          onDragEnd={() => setDraggedCells([])} // Limpiamos el estado de celdas arrastradas al soltar la imagen
+          onDragEnd={() => setDraggedCells([])}
         />
       );
     }
 
-    // Verificamos si la celda está en el estado de celdas arrastradas para aplicar el color
     const isDragged = draggedCells.includes(`${row}-${col}`);
 
     return (
@@ -104,6 +115,7 @@ Tablero.propTypes = {
       image: PropTypes.string.isRequired,
       row: PropTypes.number.isRequired,
       col: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     })
   ).isRequired,
   onDropItem: PropTypes.func.isRequired,

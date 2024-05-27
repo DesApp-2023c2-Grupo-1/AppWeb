@@ -12,7 +12,7 @@ const tablerosConfig = [
   { id: 3, gridSize: 6, posicionRobotInicial: { row: 3, col: 5, orientacion: 'izquierda' } }
 ];
 
-const Robot = () => {
+const Main = () => {
   const [tableroActual, setTableroActual] = useState(tablerosConfig[0]);
   const [posicionRobot, setPosicionRobot] = useState(tableroActual.posicionRobotInicial);
   const [items, setItems] = useState([]);
@@ -26,27 +26,23 @@ const Robot = () => {
     setIsModalOpen(false);
   };
 
-  const handleDropItem = (type, image, row, col) => {
-    setItems((prevItems) => [
-      ...prevItems.filter(item => item.type !== type || (item.type === type && (item.row !== row || item.col !== col))),
-      { type, image, row, col }
-    ]); 
-    
+  const handleDropItem = (type, image, row, col, itemId) => {
+    setItems((prevItems) => {
+      const filteredItems = prevItems.filter(item => item.id !== itemId);
+      return [...filteredItems, { type, image, row, col, id: itemId }];
+    });
   };
-  
-  const handleRemoveItem = (type, image) => {
-    setItems((prevItems) => prevItems.filter(item => item.type !== type || item.image !== image));
-  };  
+
+  const handleRemoveItem = (itemId) => {
+    setItems((prevItems) => prevItems.filter(item => item.id !== itemId));
+  };
 
   const handleTrashDrop = (e) => {
     e.preventDefault();
-    const itemType = e.dataTransfer.getData('itemType');
-    const itemImage = e.dataTransfer.getData('itemImage');
-    
-    handleRemoveItem(itemType, itemImage);
+    const itemId = e.dataTransfer.getData('itemId');
+    handleRemoveItem(itemId);
   };
-  
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -84,5 +80,4 @@ const Robot = () => {
   );
 };
 
-export default Robot;
-
+export default Main;

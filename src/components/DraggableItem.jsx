@@ -1,4 +1,3 @@
-// DraggableItem.jsx
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -6,6 +5,7 @@ const DraggableItem = ({ item, image }) => {
   const handleDragStart = (e) => {
     e.dataTransfer.setData('itemType', item);
     e.dataTransfer.setData('itemImage', image);
+    e.dataTransfer.setData('itemId', `${item}_${Date.now()}`); // Generar un ID único
   };
 
   return (
@@ -21,4 +21,3 @@ DraggableItem.propTypes = {
 };
 
 export default DraggableItem;
-
