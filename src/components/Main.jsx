@@ -52,8 +52,12 @@ const Main = () => {
       <Header />
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', marginBottom: '60px' }}>
         <div style={{ marginRight: '20px' }}>
-          <DraggableItem item="escuela" image="/images/escuela.jpg" />
-          <DraggableItem item="calle_cortada" image="/images/calle_cortada.jpg" />
+          <DraggableItem item="circo" image="/images/circo.jpeg" />
+          <DraggableItem item="escuela" image="/images/escuela.jpeg" />
+          <DraggableItem item="casa" image="/images/casa.jpeg" />
+          <DraggableItem item="plaza" image="/images/plaza.jpeg" />
+          <DraggableItem item="super" image="/images/super.jpeg" />
+          <DraggableItem item="heladeria" image="/images/heladeria.jpeg" />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Tablero
