@@ -1,5 +1,4 @@
 import React from 'react';
-import foto from './unahur.png';
 
 const Footer = () => {
     return (
@@ -20,10 +19,9 @@ const Footer = () => {
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
-            src={foto} 
-            alt=""
-            style={{ marginRight: '10px', width: '20px', height: 'auto' }} //ARREGLAR CUANDO SE ACHICA 
-                                                                          //PANTALLA SE JUNTA CON TABLERO
+            src="/images/unahur.png" 
+            alt="Unahur"
+            style={{ marginRight: '10px', width: '20px', height: 'auto' }}
           />
           <div>
             <p style={{ fontSize: '1em', margin: '0'}}>Universidad Nacional de Hurlingham</p>

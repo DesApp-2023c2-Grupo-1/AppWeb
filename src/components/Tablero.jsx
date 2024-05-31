@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './styles.css';
 
-const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
-  const [draggedCells, setDraggedCells] = useState([]);
-
+const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, setDraggedCells }) => {
   const handleDrop = (e, row, col) => {
     e.preventDefault();
 
-    // Verificar si la celda ya tiene una imagen o si es la posición del robot
     if (items.some(item => item.row === row && item.col === col) ||
         (posicionRobot.row === row && posicionRobot.col === col)) {
-      return; // No hacer nada si la celda ya está ocupada
+      return;
     }
 
     const itemType = e.dataTransfer.getData('itemType');
@@ -25,7 +22,6 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
   const handleDragOver = (e, row, col) => {
     e.preventDefault();
 
-    // No permitir arrastrar sobre una celda ocupada o la posición del robot
     if (items.some(item => item.row === row && item.col === col) ||
         (posicionRobot.row === row && posicionRobot.col === col)) {
       return;
@@ -42,7 +38,14 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
 
     let cellContent = null;
     if (isRobotHere) {
-      cellContent = '🤖';
+      cellContent = (
+        <img
+          src="/images/Z-R0.jpg"
+          alt="Robot"
+          style={{ width: '100%', height: '100%' }}
+          draggable={false}
+        />
+      );
     } else if (item) {
       cellContent = (
         <img
@@ -69,8 +72,8 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem }) => {
         onDragOver={(e) => handleDragOver(e, row, col)}
         className="cell"
         style={{
-          width: '85px',
-          height: '85px',
+          width: '90px',
+          height: '90px',
           border: '2px solid black',
           display: 'flex',
           alignItems: 'center',
@@ -119,6 +122,8 @@ Tablero.propTypes = {
     })
   ).isRequired,
   onDropItem: PropTypes.func.isRequired,
+  draggedCells: PropTypes.array.isRequired,
+  setDraggedCells: PropTypes.func.isRequired,
 };
 
 export default Tablero;
