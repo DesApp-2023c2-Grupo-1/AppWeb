@@ -6,7 +6,14 @@ const Api = {
   obtenerRegistros: () => {
     return new Promise((resolve) => {
       socket.on('comandos', (data) => {
+        console.log('Socket connected successfully!');
         resolve(data.comando);
+      });
+      socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+      });
+      socket.on('disconnect', () => {
+        console.log('Socket disconnected');
       });
     });
   },

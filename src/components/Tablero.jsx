@@ -32,20 +32,42 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
     }
   };
 
+  const robot = (orientacion) => {
+    let rotation = '';
+    switch (orientacion) {
+      case 'derecha':
+        rotation = 'rotate(0deg)';
+        break;
+      case 'izquierda':
+        rotation = 'rotate(180deg)';
+        break;
+      case 'arriba':
+        rotation = 'rotate(-90deg)';
+        break;
+      case 'abajo':
+        rotation = 'rotate(90deg)';
+        break;
+      default:
+        break;
+    }
+
+    return (
+      <img
+        src="/images/Z-R0.jpg"
+        alt="Robot"
+        style={{ width: '80%', height: '80%', transform: rotation }}
+        draggable={false}
+      />
+    );
+  };
+
   const renderCell = (row, col) => {
     const item = items.find((item) => item.row === row && item.col === col);
     const isRobotHere = posicionRobot.row === row && posicionRobot.col === col;
 
     let cellContent = null;
     if (isRobotHere) {
-      cellContent = (
-        <img
-          src="/images/Z-R0.jpg"
-          alt="Robot"
-          style={{ width: '100%', height: '100%' }}
-          draggable={false}
-        />
-      );
+      cellContent = robot(posicionRobot.orientacion);
     } else if (item) {
       cellContent = (
         <img
