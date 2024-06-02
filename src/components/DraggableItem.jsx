@@ -26,6 +26,7 @@ const DraggableItem = ({ item, image }) => {
       >{item}</p>
     </div>
   );
+  
 };
 
 DraggableItem.propTypes = {

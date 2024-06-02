@@ -85,8 +85,6 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
       );
     }
 
-    const isDragged = draggedCells.includes(`${row}-${col}`);
-
     return (
       <div
         key={`${row}-${col}`}
@@ -100,7 +98,7 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: isDragged ? '#2196f3' : '',
+         
         }}
       >
         {cellContent}

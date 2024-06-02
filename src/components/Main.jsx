@@ -184,7 +184,7 @@ const Main = () => {
           <DraggableItem item="heladería" image="/images/heladeria.jpeg" />
         </div>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '20px' }}>
-      <Tablero
+    <Tablero
         gridSize={tableroActual.gridSize}
         posicionRobot={posicionRobot}
         items={items}
