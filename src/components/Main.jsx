@@ -192,7 +192,7 @@ const Main = () => {
         draggedCells={draggedCells}
         setDraggedCells={setDraggedCells}
       />
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: '10px' }}>
         <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
       </div>
       <ModalTablero 

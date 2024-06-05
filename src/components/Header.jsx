@@ -17,8 +17,8 @@ const Header = () => {
     >
       <FaRobot style={{ fontSize: '2.5em' }} />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h1 style={{ fontSize: '2em', margin: '0' }}>¡Z-R0 web!</h1>
-        <p style={{ fontSize: '1em', margin: '0' }}>Controla tu robot y explora el tablero</p>
+        <h1 style={{ fontSize: '2em', margin: '0'}}>¡Z-R0 web!</h1>
+        <p style={{ fontSize: '1em', margin: '0',fontFamily:'grecia'  }}>Controla tu robot y explora el tablero.</p>
       </div>
       <FaRobot style={{ fontSize: '2.5em' }} />
     </header>
