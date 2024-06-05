@@ -55,9 +55,9 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
   
     return (
       <img
-        src="/images/Z-R0.jpg"
+        src="/images/Z-R0.png"
         alt="Robot"
-        style={{ width: '100%', height: '100%', transform: rotation }}
+        style={{ width: '90%', height: '90%', transform: rotation }}
         draggable={false}
       />
     );

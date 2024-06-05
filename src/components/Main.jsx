@@ -172,10 +172,10 @@ const Main = () => {
   }, [comandos]);
 
   return (
-    <div style={{ margin: '0', padding: '0', backgroundColor:"#D9D9D9" }}>
+    <div style={{ minHeight: '100vh', margin: '0', padding: '0', backgroundColor: "#D9D9D9", display: 'flex', flexDirection: 'column' }}>
       <Header />
-      <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '20px', marginBottom: '60px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: '50px' }}>
+      <div className="main-content">
+        <div className="draggable-items">
           <DraggableItem item="circo" image="/images/circo-mod.png" />
           <DraggableItem item="escuela" image="/images/escuela-mod.png" />
           <DraggableItem item="casa" image="/images/casa-mod.png" />
@@ -183,35 +183,36 @@ const Main = () => {
           <DraggableItem item="supermercado" image="/images/super-mod.png" />
           <DraggableItem item="heladería" image="/images/heladeria-mod.png" />
         </div>
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '20px' }}>
-    <Tablero
-        gridSize={tableroActual.gridSize}
-        posicionRobot={posicionRobot}
-        items={items}
-        onDropItem={handleDropItem}
-        draggedCells={draggedCells}
-        setDraggedCells={setDraggedCells}
-      />
-      <div style={{ marginTop: '10px' }}>
-        <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
+        <div className="tablero-container">
+          <Tablero
+            gridSize={tableroActual.gridSize}
+            posicionRobot={posicionRobot}
+            items={items}
+            onDropItem={handleDropItem}
+            draggedCells={draggedCells}
+            setDraggedCells={setDraggedCells}
+          />
+          <div style={{ marginTop: '20px' }}>
+            <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
+          </div>
+          <ModalTablero 
+            isOpen={isModalOpen} 
+            onClose={() => setIsModalOpen(false)} 
+            onSelectTablero={handleSelectTablero} 
+          />
+        </div>
       </div>
-      <ModalTablero 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onSelectTablero={handleSelectTablero} 
-      />
+      <div 
+        onDrop={handleTrashDrop}  
+        onDragOver={handleDragOver}
+        style={{ position: 'fixed', bottom: '10px', right: '20px', width: '100px', height: '100px', cursor: 'pointer' }}
+      >
+        <FontAwesomeIcon onClick={handleClearAllItems}  icon={faTrashCan} style={{ color: 'red', width: '35%', height: '35%' }} />
+      </div>
+      <Footer />
     </div>
-  </div>
-  <div 
-    onDrop={handleTrashDrop}  
-    onDragOver={handleDragOver}
-    style={{ position: 'fixed', bottom: '20px', right: '20px', width: '100px', height: '100px', cursor: 'pointer' }}
-  >
-    <FontAwesomeIcon onClick={handleClearAllItems}  icon={faTrashCan} style={{ color: 'red', width: '40%', height: '40%' }} />
-  </div>
-  <Footer />
-</div>
-);
+  );
+  
 };
 
 export default Main;

@@ -4,8 +4,8 @@ const Footer = () => {
     return (
       <footer 
         style={{
-          backgroundColor: '#29bfc7',
-          padding: '20px',
+          backgroundColor: 'rgba(41, 191, 199, 0.7)',
+          padding: '0.5px',
           width: '100%',
           position: 'fixed',
           bottom: '0%',
@@ -21,10 +21,10 @@ const Footer = () => {
           <img
             src="/images/unahur.png" 
             alt="Unahur"
-            style={{ marginRight: '30px', width: '30px', height: 'auto' }}
+            style={{  marginRight: '5px', width: '50px', height: 'auto' }}
           />
           <div>
-            <p style={{ fontSize: '1.5em', margin: '0',color: 'black'}}>Universidad Nacional de Hurlingham</p>
+            <p style={{ fontSize: '1.3em', margin: '0',color: 'black'}}>Universidad Nacional de Hurlingham</p>
           </div>
         </div>
       </footer>
