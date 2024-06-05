@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import './styles.css';
 
 const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, setDraggedCells }) => {
+
+ 
   const handleDrop = (e, row, col) => {
     e.preventDefault();
 
@@ -98,6 +100,7 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          backgroundColor:"white"
          
         }}
       >
@@ -146,4 +149,4 @@ Tablero.propTypes = {
   setDraggedCells: PropTypes.func.isRequired,
 };
 
-export default Tablero;
+export default Tablero;      

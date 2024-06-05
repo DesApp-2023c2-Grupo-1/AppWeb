@@ -172,16 +172,16 @@ const Main = () => {
   }, [comandos]);
 
   return (
-    <div style={{ margin: '0', padding: '0' }}>
+    <div style={{ margin: '0', padding: '0', backgroundColor:"#D9D9D9" }}>
       <Header />
       <div style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: '20px', marginBottom: '60px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: '50px' }}>
-          <DraggableItem item="circo" image="/images/circo.jpeg" />
-          <DraggableItem item="escuela" image="/images/escuela.jpeg" />
-          <DraggableItem item="casa" image="/images/casa.jpeg" />
-          <DraggableItem item="plaza" image="/images/plaza.jpeg" />
-          <DraggableItem item="supermercado" image="/images/super.jpeg" />
-          <DraggableItem item="heladería" image="/images/heladeria.jpeg" />
+          <DraggableItem item="circo" image="/images/circo-mod.png" />
+          <DraggableItem item="escuela" image="/images/escuela-mod.png" />
+          <DraggableItem item="casa" image="/images/casa-mod.png" />
+          <DraggableItem item="plaza" image="/images/plaza-mod.png" />
+          <DraggableItem item="supermercado" image="/images/super-mod.png" />
+          <DraggableItem item="heladería" image="/images/heladeria-mod.png" />
         </div>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '20px' }}>
     <Tablero
