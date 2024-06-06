@@ -209,7 +209,7 @@ const Main = () => {
       >
         <FontAwesomeIcon onClick={handleClearAllItems}  icon={faTrashCan} style={{ color: 'red', width: '35%', height: '35%' }} />
       </div>
-      <Footer />
+     { /*<Footer />*/}
     </div>
   );
   
