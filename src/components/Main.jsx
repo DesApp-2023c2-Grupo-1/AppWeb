@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Tablero from './Tablero';
 import Header from './Header';
 import Footer from './Footer';
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import Api from '../api';
 
+
 const tablerosConfig = [
   { id: 1, gridSize: 6, posicionRobotInicial: { row: 0, col: 0, orientacion: 'derecha' } },
   { id: 2, gridSize: 6, posicionRobotInicial: { row: 2, col: 3, orientacion: 'abajo' } },
@@ -17,14 +18,17 @@ const tablerosConfig = [
 
 const Main = () => {
   const [tableroActual, setTableroActual] = useState(tablerosConfig[0]);
-  const [posicionRobot, setPosicionRobot] = useState(tableroActual.posicionRobotInicial);
   const [items, setItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [draggedCells, setDraggedCells] = useState([]);
   const [comandos, setComandos] = useState([]);
+  const posicionRobotRef = useRef(tableroActual.posicionRobotInicial);
+  const [posicionRobot, setPosicionRobot] = useState(posicionRobotRef.current);
+  const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
     setPosicionRobot(tableroActual.posicionRobotInicial);
+    posicionRobotRef.current = tableroActual.posicionRobotInicial;
   }, [tableroActual]);
 
   const handleSelectTablero = (id) => {
@@ -33,6 +37,8 @@ const Main = () => {
     setItems([]);
     setIsModalOpen(false);
     setDraggedCells([]);
+    setPosicionRobot(nuevoTablero.posicionRobotInicial);
+    posicionRobotRef.current = nuevoTablero.posicionRobotInicial;
   };
 
   const handleDropItem = (type, image, row, col, itemId) => {
@@ -84,135 +90,181 @@ const Main = () => {
           return prevPosicion;
       }
 
+      posicionRobotRef.current = nuevaPosicion;
       return nuevaPosicion;
+      
     });
+    
   };
 
   const moverEnDireccion = (posicion, avanza) => {
     const direccion = posicion.orientacion;
-    const gridSize = tableroActual.gridSize
+    const gridSize = tableroActual.gridSize;
     const cambios = {
       'abajo': { row: avanza ? 1 : -1, col: 0 },
       'derecha': { row: 0, col: avanza ? 1 : -1 },
       'izquierda': { row: 0, col: avanza ? -1 : 1 },
       'arriba': { row: avanza ? -1 : 1, col: 0 },
     };
-
-    posicion.row = (posicion.row + cambios[direccion].row + gridSize) % gridSize;
-    posicion.col = (posicion.col + cambios[direccion].col + gridSize) % gridSize;
-  };
-
-  const cambiarOrientacion = (posicion, nuevaOrientacion) => {
-    const transicionesOrientacion = {
-      'derecha': { 'derecha': 'abajo', 'izquierda': 'arriba' },
-      'abajo': { 'derecha': 'izquierda', 'izquierda': 'derecha' },
-      'izquierda': { 'derecha': 'arriba', 'izquierda': 'abajo' },
-      'arriba': { 'derecha': 'derecha', 'izquierda': 'izquierda' },
-    };
-
-    posicion.orientacion = transicionesOrientacion[posicion.orientacion][nuevaOrientacion];
-  };
-
-  const obtenerRegistrosSiempre = async () => {
-    const registro = await Api.obtenerRegistros();
-    const nuevosComandos = registro.comandos || [];
-
-    setComandos(nuevosComandos);
-  };
-
-  const ejecutarComandos = async () => {
-    for (let i = 0; i < comandos.length; i++) {
-      if (comandos[i] !== null) {
-        switch (comandos[i].toUpperCase()) {
-          case 'F':
-            await delay(1000);
-            await moverRobotAsync('avanzar');
-            break;
-          case 'R':
-            await delay(1000);
-            await moverRobotAsync('derecha');
-            break;
-          case 'L':
-            await delay(1000);
-            await moverRobotAsync('izquierda');
-            break;
-          case 'B':
-            await delay(1000);
-            await moverRobotAsync('retroceder');
-            break;
-          default:
-            alert('Comando no reconocido');
-            break;
-        }
-      }
-    }
-
-    setComandos([]);
-    await delay(1000);
-    setPosicionRobot(posicionRobot);
-  };
-
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-  const moverRobotAsync = async (direction) => {
-    return new Promise((resolve) => {
-      moverRobot(direction);
-      setTimeout(() => resolve(), 0);
-    });
-  };
-
-  useEffect(() => {
-    obtenerRegistrosSiempre();
-  }, [comandos]);
-
-  useEffect(() => {
-    if (comandos.length > 0) {
-      ejecutarComandos();
-    }
-  }, [comandos]);
-
-  return (
-    <div style={{ minHeight: '100vh', margin: '0', padding: '0', backgroundColor: "#D9D9D9", display: 'flex', flexDirection: 'column' }}>
-      <Header />
-      <div className="main-content">
-        <div className="draggable-items">
-          <DraggableItem item="circo" image="/images/circo-mod.png" />
-          <DraggableItem item="escuela" image="/images/escuela-mod.png" />
-          <DraggableItem item="casa" image="/images/casa-mod.png" />
-          <DraggableItem item="plaza" image="/images/plaza-mod.png" />
-          <DraggableItem item="supermercado" image="/images/super-mod.png" />
-          <DraggableItem item="heladería" image="/images/heladeria-mod.png" />
-        </div>
-        <div className="tablero-container">
-          <Tablero
-            gridSize={tableroActual.gridSize}
-            posicionRobot={posicionRobot}
-            items={items}
-            onDropItem={handleDropItem}
-            draggedCells={draggedCells}
-            setDraggedCells={setDraggedCells}
-          />
-          <div style={{ marginTop: '20px' }}>
-            <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
-          </div>
-          <ModalTablero 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)} 
-            onSelectTablero={handleSelectTablero} 
-          />
-        </div>
-      </div>
-      <div 
-        onDrop={handleTrashDrop}  
-        onDragOver={handleDragOver}
-        style={{ position: 'fixed', bottom: '10px', right: '20px', width: '100px', height: '100px', cursor: 'pointer' }}
-      >
-        <FontAwesomeIcon onClick={handleClearAllItems}  icon={faTrashCan} style={{ color: 'red', width: '35%', height: '35%' }} />
-      </div>
-     { /*<Footer />*/}
-    </div>
-  );
   
-};
+    const nuevaFila = (posicion.row + cambios[direccion].row);
+    const nuevaColumna = (posicion.col + cambios[direccion].col);
+  
+    // Verificar si la nueva posición está dentro de los límites del tablero
+    if (nuevaFila >= 0 && nuevaFila < gridSize && nuevaColumna >= 0 && nuevaColumna < gridSize) {
+      // Actualizar la posición del robot
+      posicion.row = nuevaFila;
+      posicion.col = nuevaColumna;
+    }
+    const itemEnPosicion = items.find(item => item.row === nuevaFila && item.col === nuevaColumna);
+    if (itemEnPosicion) {
+      setMensaje(`Me encuentro en ${itemEnPosicion.type}`);
+      setTimeout(() => {
+        setMensaje(null);
+      }, 2000); 
+    }
+  };  
+    
+      const cambiarOrientacion = (posicion, nuevaOrientacion) => {
+        const transicionesOrientacion = {
+          'derecha': { 'derecha': 'abajo', 'izquierda': 'arriba' },
+          'abajo': { 'derecha': 'izquierda', 'izquierda': 'derecha' },
+          'izquierda': { 'derecha': 'arriba', 'izquierda': 'abajo' },
+          'arriba': { 'derecha': 'derecha', 'izquierda': 'izquierda' },
+        };
+    
+        posicion.orientacion = transicionesOrientacion[posicion.orientacion][nuevaOrientacion];
+      };
+    
+      const obtenerRegistrosSiempre = async () => {
+        try {
+          const registro = await Api.obtenerRegistros();
+          const nuevosComandos = registro.comandos || [];
+    
+          console.log('Comandos recibidos:', nuevosComandos);
+    
+          if (nuevosComandos.length > 0) {
+            setComandos(nuevosComandos);
+            console.log('Comandos state:', comandos);
+          }
+        } catch (error) {
+          console.error('Error al obtener comandos:', error);
+        }
+      };  
+    
+      const ejecutarComandos = async () => {
+        for (let i = 0; i < comandos.length; i++) {
+          if (comandos[i] !== null) {
+            switch (comandos[i].toUpperCase()) {
+              case 'F':
+                console.log('Ejecutando comando: Avanzar');
+                await moverRobotAsync('avanzar');
+                break;
+              case 'R':
+                console.log('Ejecutando comando: Derecha');
+                await moverRobotAsync('derecha');
+                break;
+              case 'L':
+                console.log('Ejecutando comando: Izquierda');
+                await moverRobotAsync('izquierda');
+                break;
+              case 'B':
+                console.log('Ejecutando comando: Retroceder');
+                await moverRobotAsync('retroceder');
+                break;
+              default:
+                console.error('Comando no reconocido:', comandos[i]);
+                break;
+            }
+          }
+        }
+      
+        setComandos([]); 
+      };
+      
+      const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    
+      const moverRobotAsync = async (direction) => {
+        return new Promise((resolve) => {
+          moverRobot(direction);
+          delay(1000).then(() => resolve());
+        });
+      };      
+    
+      useEffect(() => {
+        obtenerRegistrosSiempre();
+      }, [comandos]);
+    
+      useEffect(() => {
+        if (comandos.length > 0) {
+          ejecutarComandos();
+        }
+      }, [comandos]);
+    
+      return (
+        <div style={{ minHeight: '100vh', margin: '0', padding: '0', backgroundColor: "#D9D9D9", display: 'flex', flexDirection: 'column' }}>
+          <Header />
+          <div className="main-content">
+            <div className="draggable-items">
+              <DraggableItem item="circo" image="/images/circo-mod.png" />
+              <DraggableItem item="escuela" image="/images/escuela-mod.png" />
+              <DraggableItem item="casa" image="/images/casa-mod.png" />
+              <DraggableItem item="plaza" image="/images/plaza-mod.png" />
+              <DraggableItem item="supermercado" image="/images/super-mod.png" />
+              <DraggableItem item="heladería" image="/images/heladeria-mod.png" />
+            </div>
+            <div className="tablero-container">
+              <Tablero
+                gridSize={tableroActual.gridSize}
+                posicionRobot={posicionRobot}
+                items={items}
+                onDropItem={handleDropItem}
+                draggedCells={draggedCells}
+                setDraggedCells={setDraggedCells}
+              />
+              {mensaje && (
+                <div
+                  className="dialogo"
+                  style={{
+                    position: 'absolute',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    top: 0,
+                    left: 0,
+                    transform: `translate(${posicionRobot.col * tableroActual.gridSize}px, ${posicionRobot.row * tableroActual.gridSize}px)`,
+                    backgroundColor: 'white',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+                    zIndex: '9999',
+                  }}
+                >
+                  {mensaje}
+                </div>
 
-export default Main;
+              )}
+              <div style={{ marginTop: '20px' }}>
+                <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
+              </div>
+              <ModalTablero 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onSelectTablero={handleSelectTablero} 
+              />
+            </div>
+          </div>
+          <div 
+            onDrop={handleTrashDrop}  
+            onDragOver={handleDragOver}
+            style={{ position: 'fixed', bottom: '10px', right: '20px', width: '100px', height: '100px', cursor: 'pointer' }}
+          >
+            <FontAwesomeIcon onClick={handleClearAllItems}  icon={faTrashCan} style={{ color: 'red', width: '35%', height: '35%' }} />
+          </div>
+         { /*<Footer />*/}
+        </div>
+      );
+    };
+    
+    export default Main;    
