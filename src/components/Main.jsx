@@ -4,11 +4,10 @@ import Header from './Header';
 import Footer from './Footer';
 import ModalTablero from './ModalTablero';
 import DraggableItem from './DraggableItem';
-import './styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import './styles.css'; // Importamos el archivo de estilos CSS
 import Api from '../api';
-
 
 const tablerosConfig = [
   { id: 1, gridSize: 6, posicionRobotInicial: { row: 0, col: 0, orientacion: 'derecha' } },
@@ -92,9 +91,7 @@ const Main = () => {
 
       posicionRobotRef.current = nuevaPosicion;
       return nuevaPosicion;
-
     });
-
   };
 
   const moverEnDireccion = (posicion, avanza) => {
@@ -202,7 +199,7 @@ const Main = () => {
   }, [comandos]);
 
   return (
-    <div style={{ minHeight: '100vh', margin: '0', padding: '0', backgroundColor: "#D9D9D9", display: 'flex', flexDirection: 'column' }}>
+    <div id="root" >
       <Header />
       <div className="main-content">
         <div className="draggable-items">
@@ -223,53 +220,26 @@ const Main = () => {
             setDraggedCells={setDraggedCells}
           />
           {mensaje && (
-            <div
-              className="dialogo"
-              style={{
-                position: 'absolute',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                top: 0,
-                bottom: '50%',
-                left: 0,
-                right: '30px',
-                transform: `translate(${posicionRobot.col * tableroActual.gridSize}px, ${posicionRobot.row * tableroActual.gridSize}px)`,
-                backgroundColor: 'rgba(41, 191, 199, 0.7)',
-                padding: '10px',
-                borderRadius: '80%',
-                boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-                zIndex: '9999',
-                fontFamily: 'futura',
-                fontSize: '80px',
-                widht: '2px'
-              }}
-            >
+            <div className="dialogo">
               {mensaje}
             </div>
-
           )}
-          <div style={{ marginTop: '20px' }}>
-            <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
-          </div>
+          <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
           <ModalTablero
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             onSelectTablero={handleSelectTablero}
           />
+
         </div>
+        <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
+            <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} className="trash-icon" />
+        </div>  
       </div>
-      <div
-        onDrop={handleTrashDrop}
-        onDragOver={handleDragOver}
-        style={{ position: 'fixed', bottom: '10px', right: '20px', width: '100px', height: '100px', cursor: 'pointer' }}
-      >
-        <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} style={{ color: 'red', width: '35%', height: '35%' }} />
-      </div>
-      { /*<Footer />*/}
+      
+      <Footer />
     </div>
   );
 };
 
-export default Main;    
+export default Main;

@@ -4,7 +4,6 @@ import './styles.css';
 
 const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, setDraggedCells }) => {
 
- 
   const handleDrop = (e, row, col) => {
     e.preventDefault();
 
@@ -93,16 +92,6 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
         onDrop={(e) => handleDrop(e, row, col)}
         onDragOver={(e) => handleDragOver(e, row, col)}
         className="cell"
-        style={{
-          width: '90px',
-          height: '90px',
-          border: '2px solid black',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor:"white"
-         
-        }}
       >
         {cellContent}
       </div>

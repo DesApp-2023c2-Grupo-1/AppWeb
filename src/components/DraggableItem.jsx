@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './styles.css';
 
 const DraggableItem = ({ item, image }) => {
   const handleDragStart = (e) => {
@@ -9,24 +10,11 @@ const DraggableItem = ({ item, image }) => {
   };
 
   return (
-    <div draggable onDragStart={handleDragStart} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px', textAlign: 'center' }}>
-      <img src={image} alt={item} style={{ width: '105px', height: '105px', borderRadius: '5px'}} />
-      <p 
-        style={{
-          margin: '0',
-          display: 'flex',
-          alignItems: 'center',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          marginTop: '15px',
-          color: '#333',
-          textTransform: 'capitalize',
-          fontFamily: 'Arial, sans-serif'
-        }}
-      >{item}</p>
+    <div className="draggable-item" draggable onDragStart={handleDragStart}>
+      <img src={image} alt={item} />
+      <p>{item}</p>
     </div>
   );
-  
 };
 
 DraggableItem.propTypes = {
