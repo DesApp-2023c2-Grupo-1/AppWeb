@@ -15,7 +15,6 @@ import { Alert } from '@material-ui/lab';
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <React.StrictMode>
-      <CssBaseline />
       <RecoilRoot>
         <Suspense fallback={<CircularProgress />}>
           <ErrorBoundary

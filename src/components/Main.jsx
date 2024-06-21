@@ -199,7 +199,7 @@ const Main = () => {
   }, [comandos]);
 
   return (
-    <div id="root" >
+    <div id="main" >
       <Header />
       <div className="main-content">
         <div className="draggable-items">
@@ -231,11 +231,11 @@ const Main = () => {
             onSelectTablero={handleSelectTablero}
           />
 
-        </div>
-        <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
-            <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} className="trash-icon" />
-        </div>  
+        </div> 
       </div>
+      <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
+            <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} className="trash-icon" />
+       </div> 
       
       <Footer />
     </div>
