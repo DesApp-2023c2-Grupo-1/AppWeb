@@ -230,13 +230,11 @@ const Main = () => {
             onClose={() => setIsModalOpen(false)}
             onSelectTablero={handleSelectTablero}
           />
-
-        </div> 
-      </div>
-      <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
+          <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
             <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} className="trash-icon" />
-       </div> 
-      
+          </div> 
+        </div> 
+      </div>      
       <Footer />
     </div>
   );
