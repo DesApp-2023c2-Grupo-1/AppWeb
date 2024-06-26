@@ -115,7 +115,7 @@ const Main = () => {
     }
     const itemEnPosicion = items.find(item => item.row === nuevaFila && item.col === nuevaColumna);
     if (itemEnPosicion) {
-      setMensaje(`Estoy en ${itemEnPosicion.type}!!`);
+      setMensaje(`ESTOY EN ${itemEnPosicion.type}!!`);
       setTimeout(() => {
         setMensaje(null);
       }, 2000);
@@ -203,12 +203,12 @@ const Main = () => {
       <Header />
       <div className="main-content">
         <div className="draggable-items">
-          <DraggableItem item="circo" image="/images/circo-mod.png" />
-          <DraggableItem item="escuela" image="/images/escuela-mod.png" />
-          <DraggableItem item="casa" image="/images/casa-mod.png" />
-          <DraggableItem item="plaza" image="/images/plaza-mod.png" />
-          <DraggableItem item="supermercado" image="/images/super-mod.png" />
-          <DraggableItem item="heladería" image="/images/heladeria-mod.png" />
+          <DraggableItem item="CIRCO" image="/images/circo-mod.png" />
+          <DraggableItem item="ESCUELA" image="/images/escuela-mod.png" />
+          <DraggableItem item="CASA" image="/images/casa-mod.png" />
+          <DraggableItem item="PLAZA" image="/images/plaza-mod.png" />
+          <DraggableItem item="SUPERMERCADO" image="/images/super-mod.png" />
+          <DraggableItem item="HELADERÍA" image="/images/heladeria-mod.png" />
         </div>
         <div className="tablero-container">
           <Tablero
@@ -232,9 +232,9 @@ const Main = () => {
           />
           <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
             <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} className="trash-icon" />
-          </div> 
-        </div> 
-      </div>      
+          </div>
+        </div>
+      </div>
       <Footer />
     </div>
   );
