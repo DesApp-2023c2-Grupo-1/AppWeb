@@ -23,7 +23,7 @@ const Main = () => {
   const [comandos, setComandos] = useState([]);
   const posicionRobotRef = useRef(tableroActual.posicionRobotInicial);
   const [posicionRobot, setPosicionRobot] = useState(posicionRobotRef.current);
-  const [mensaje, setMensaje] = useState(null);
+  /*const [mensaje, setMensaje] = useState(null);*/
 
   useEffect(() => {
     setPosicionRobot(tableroActual.posicionRobotInicial);
@@ -113,13 +113,13 @@ const Main = () => {
       posicion.row = nuevaFila;
       posicion.col = nuevaColumna;
     }
-    const itemEnPosicion = items.find(item => item.row === nuevaFila && item.col === nuevaColumna);
+    /*const itemEnPosicion = items.find(item => item.row === nuevaFila && item.col === nuevaColumna);
     if (itemEnPosicion) {
       setMensaje(`ESTOY EN ${itemEnPosicion.type}!!`);
       setTimeout(() => {
         setMensaje(null);
       }, 2000);
-    }
+    }*/
   };
 
   const cambiarOrientacion = (posicion, nuevaOrientacion) => {
@@ -219,11 +219,7 @@ const Main = () => {
             draggedCells={draggedCells}
             setDraggedCells={setDraggedCells}
           />
-          {mensaje && (
-            <div className="dialogo">
-              {mensaje}
-            </div>
-          )}
+
           <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
           <ModalTablero
             isOpen={isModalOpen}

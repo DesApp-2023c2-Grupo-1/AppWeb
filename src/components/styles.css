@@ -41,6 +41,7 @@ h1 {
 
 .header-content {
   text-align: center;
+  font-family: 'Arial, sans-serif';
 }
 
 .header-title {
@@ -269,7 +270,7 @@ h1 {
   font-size: 40px;
 }
 
-.dialogo {
+/*.dialogo {
   background-color: rgba(0, 238, 255);
   padding: 50px;
   border-radius: 25px;
@@ -289,7 +290,7 @@ h1 {
   transform: translate(-50%, -50%);
   z-index: 1050;
   font-family: 'Arial', sans-serif;
-}
+}*/
 
 @media (max-width: 1150px) {
   .main-content {
