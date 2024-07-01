@@ -6,12 +6,12 @@ import ModalTablero from './ModalTablero';
 import DraggableItem from './DraggableItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import './styles.css'; // Importamos el archivo de estilos CSS
+import '../styles.css';
 import Api from '../api';
 
 const tablerosConfig = [
   { id: 1, gridSize: 6, posicionRobotInicial: { row: 0, col: 0, orientacion: 'derecha' } },
-  { id: 2, gridSize: 6, posicionRobotInicial: { row: 2, col: 3, orientacion: 'abajo' } },
+  { id: 2, gridSize: { rows: 5, cols: 4 }, posicionRobotInicial: { row: 2, col: 3, orientacion: 'abajo' } },
   { id: 3, gridSize: 6, posicionRobotInicial: { row: 3, col: 5, orientacion: 'izquierda' } }
 ];
 
@@ -23,7 +23,6 @@ const Main = () => {
   const [comandos, setComandos] = useState([]);
   const posicionRobotRef = useRef(tableroActual.posicionRobotInicial);
   const [posicionRobot, setPosicionRobot] = useState(posicionRobotRef.current);
-  /*const [mensaje, setMensaje] = useState(null);*/
 
   useEffect(() => {
     setPosicionRobot(tableroActual.posicionRobotInicial);
@@ -96,7 +95,8 @@ const Main = () => {
 
   const moverEnDireccion = (posicion, avanza) => {
     const direccion = posicion.orientacion;
-    const gridSize = tableroActual.gridSize;
+    const gridSizeRows = typeof tableroActual.gridSize === 'object' ? tableroActual.gridSize.rows : tableroActual.gridSize;
+    const gridSizeCols = typeof tableroActual.gridSize === 'object' ? tableroActual.gridSize.cols : tableroActual.gridSize;
     const cambios = {
       'abajo': { row: avanza ? 1 : -1, col: 0 },
       'derecha': { row: 0, col: avanza ? 1 : -1 },
@@ -107,19 +107,18 @@ const Main = () => {
     const nuevaFila = (posicion.row + cambios[direccion].row);
     const nuevaColumna = (posicion.col + cambios[direccion].col);
 
-    // Verificar si la nueva posición está dentro de los límites del tablero
-    if (nuevaFila >= 0 && nuevaFila < gridSize && nuevaColumna >= 0 && nuevaColumna < gridSize) {
-      // Actualizar la posición del robot
-      posicion.row = nuevaFila;
-      posicion.col = nuevaColumna;
+    if (
+      nuevaFila >= 0 &&
+      nuevaFila < gridSizeRows &&
+      nuevaColumna >= 0 &&
+      nuevaColumna < gridSizeCols
+    ) {
+      const itemEnPosicion = items.find(item => item.row === nuevaFila && item.col === nuevaColumna);
+      if (!itemEnPosicion) {
+        posicion.row = nuevaFila;
+        posicion.col = nuevaColumna;
+      }
     }
-    /*const itemEnPosicion = items.find(item => item.row === nuevaFila && item.col === nuevaColumna);
-    if (itemEnPosicion) {
-      setMensaje(`ESTOY EN ${itemEnPosicion.type}!!`);
-      setTimeout(() => {
-        setMensaje(null);
-      }, 2000);
-    }*/
   };
 
   const cambiarOrientacion = (posicion, nuevaOrientacion) => {
@@ -199,39 +198,70 @@ const Main = () => {
   }, [comandos]);
 
   return (
-    <div id="main" >
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      minHeight: '100vh',
+      backgroundColor: '#d9d9d9',
+      fontFamily: 'Arial, sans-serif',
+    }}>
       <Header />
-      <div className="main-content">
-        <div className="draggable-items">
-          <DraggableItem item="CIRCO" image="/images/circo-mod.png" />
-          <DraggableItem item="ESCUELA" image="/images/escuela-mod.png" />
-          <DraggableItem item="CASA" image="/images/casa-mod.png" />
-          <DraggableItem item="PLAZA" image="/images/plaza-mod.png" />
-          <DraggableItem item="SUPERMERCADO" image="/images/super-mod.png" />
-          <DraggableItem item="HELADERÍA" image="/images/heladeria-mod.png" />
-        </div>
-        <div className="tablero-container">
-          <Tablero
-            gridSize={tableroActual.gridSize}
-            posicionRobot={posicionRobot}
-            items={items}
-            onDropItem={handleDropItem}
-            draggedCells={draggedCells}
-            setDraggedCells={setDraggedCells}
-          />
-
-          <button className="button-cambiar-tablero" onClick={() => setIsModalOpen(true)}>Cambiar Tablero</button>
-          <ModalTablero
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSelectTablero={handleSelectTablero}
-          />
-          <div className="trash-can" onDrop={handleTrashDrop} onDragOver={handleDragOver}>
-            <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} className="trash-icon" />
+        <div className='main-content' style={{ 
+          display: 'flex', 
+          flex: 1, 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          padding: '10px',
+          marginTop: '10px',
+          overflow: 'hidden'  
+        }}>
+          <div className={`draggable-items ${tableroActual.id === 2 ? 'tablero2' : ''}`}>
+            <DraggableItem item="CIRCO" image="/images/circo-mod.png" />
+            <DraggableItem item="ESCUELA" image="/images/escuela-mod.png" />
+            <DraggableItem item="CASA" image="/images/casa-mod.png" />
+            <DraggableItem item="PLAZA" image="/images/plaza-mod.png" />
+            <DraggableItem item="SUPERMERCADO" image="/images/super-mod.png" />
+            <DraggableItem item="HELADERÍA" image="/images/heladeria-mod.png" />
+          </div>
+          <div className='tablero-container' style={{ display: 'flex', flex: '1', flexDirection: 'column', alignItems: 'center' }}>
+            <Tablero
+              gridSize={tableroActual.gridSize}
+              posicionRobot={posicionRobot}
+              items={items}
+              onDropItem={handleDropItem}
+              draggedCells={draggedCells}
+              setDraggedCells={setDraggedCells}
+            />
+            <button onClick={() => setIsModalOpen(true)} style={{
+              padding: '14px 20px',
+              backgroundColor: '#4caf50',
+              color: 'white',
+              border: 'none',
+              borderRadius: '50px',
+              cursor: 'pointer',
+              marginTop: '20px',
+              fontSize: '1em',
+              width: '160px',
+              transition: 'background-color 0.3s, transform 0.2s',
+              textAlign: 'center'
+            }}>Cambiar Tablero</button>
+            <div style={{
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+              alignSelf: 'flex-end',
+              color: 'white',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              padding: '5px'
+            }} onDrop={handleTrashDrop} onDragOver={handleDragOver}>
+              <FontAwesomeIcon onClick={handleClearAllItems} icon={faTrashCan} style={{ fontSize: '40px', color: 'red' }} />
+            </div>
           </div>
         </div>
-      </div>
       <Footer />
+      <ModalTablero isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSelectTablero={handleSelectTablero} />
     </div>
   );
 };

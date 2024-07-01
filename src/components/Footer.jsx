@@ -1,13 +1,16 @@
 import React from 'react';
-import './styles.css';
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <img src="/images/unahur.png" alt="Unahur" className="footer-logo" />
+    <footer style={{
+      backgroundColor: 'rgba(41, 191, 199, 0.7)',
+      fontFamily: 'Arial, sans-serif',
+      color: 'white'
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+        <img src="/images/unahur.png" alt="Unahur" style={{ marginRight: '5px', width: '50px' }} />
         <div>
-          <p className="footer-text">Universidad Nacional de Hurlingham</p>
+          <p style={{ fontSize: '1.2em', textAlign: 'center', color: 'black', fontFamily: 'Arial, sans-serif' }}>Universidad Nacional de Hurlingham</p>
         </div>
       </div>
     </footer>

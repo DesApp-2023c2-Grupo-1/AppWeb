@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles.css';
 
 const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, setDraggedCells }) => {
+  const rows = typeof gridSize === 'object' ? gridSize.rows : gridSize;
+  const cols = typeof gridSize === 'object' ? gridSize.cols : gridSize;
 
   const handleDrop = (e, row, col) => {
     e.preventDefault();
-
     if (items.some(item => item.row === row && item.col === col) ||
         (posicionRobot.row === row && posicionRobot.col === col)) {
       return;
@@ -22,7 +22,6 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
 
   const handleDragOver = (e, row, col) => {
     e.preventDefault();
-
     if (items.some(item => item.row === row && item.col === col) ||
         (posicionRobot.row === row && posicionRobot.col === col)) {
       return;
@@ -51,7 +50,7 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
       default:
         break;
     }
-  
+
     return (
       <img
         src="/images/Z-R0.png"
@@ -60,7 +59,7 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
         draggable={false}
       />
     );
-  };  
+  };
 
   const renderCell = (row, col) => {
     const item = items.find((item) => item.row === row && item.col === col);
@@ -91,7 +90,17 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
         key={`${row}-${col}`}
         onDrop={(e) => handleDrop(e, row, col)}
         onDragOver={(e) => handleDragOver(e, row, col)}
-        className="cell"
+        style={{
+          width: '10vw',
+          height: '10vw',
+          maxHeight: '75px',
+          maxWidth: '75px',
+          border: '2px solid black',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'white'
+        }}
       >
         {cellContent}
       </div>
@@ -100,25 +109,31 @@ const Tablero = ({ gridSize, posicionRobot, items, onDropItem, draggedCells, set
 
   const renderGrid = () => {
     const grid = [];
-    for (let row = 0; row < gridSize; row++) {
-      const cols = [];
-      for (let col = 0; col < gridSize; col++) {
-        cols.push(renderCell(row, col));
+    for (let row = 0; row < rows; row++) {
+      const colElements = [];
+      for (let col = 0; col < cols; col++) {
+        colElements.push(renderCell(row, col));
       }
       grid.push(
-        <div key={row} className="row" style={{ display: 'flex' }}>
-          {cols}
+        <div key={row} style={{ display: 'flex' }}>
+          {colElements}
         </div>
       );
     }
     return grid;
   };
 
-  return <div className="tablero">{renderGrid()}</div>;
+  return renderGrid();
 };
 
 Tablero.propTypes = {
-  gridSize: PropTypes.number.isRequired,
+  gridSize: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.shape({
+      rows: PropTypes.number.isRequired,
+      cols: PropTypes.number.isRequired
+    })
+  ]).isRequired,
   posicionRobot: PropTypes.shape({
     row: PropTypes.number.isRequired,
     col: PropTypes.number.isRequired,
@@ -138,4 +153,4 @@ Tablero.propTypes = {
   setDraggedCells: PropTypes.func.isRequired,
 };
 
-export default Tablero;      
+export default Tablero;
