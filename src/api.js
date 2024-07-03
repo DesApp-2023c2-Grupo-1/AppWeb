@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socket = io('https://api-tn9p.onrender.com');
+const socket = io('https://api-tn9p.onrender.com/3001');
 
 const Api = {
   obtenerRegistros: () => {
