@@ -19,7 +19,9 @@ ReactDOM.render(
         <Suspense fallback={<CircularProgress />}>
           <ErrorBoundary
             fallback={<Alert severity="error">Algo se rompió feo :(</Alert>}
-          ></ErrorBoundary>
+          >
+            <App />
+          </ErrorBoundary>
         </Suspense>
       </RecoilRoot>
     </React.StrictMode>
