@@ -2,11 +2,7 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {
-  CircularProgress,
-  CssBaseline,
-  ThemeProvider,
-} from '@material-ui/core';
+import { CircularProgress, ThemeProvider } from '@material-ui/core';
 import theme from './theme';
 import { RecoilRoot } from 'recoil';
 import { ErrorBoundary } from 'react-error-boundary';
