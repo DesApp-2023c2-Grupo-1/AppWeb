@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socket = io('https://api-ihgc.onrender.com');
+const socket = io('https://api-ihgc.onrender.com/comandos');
 
 const Api = {
   obtenerRegistros: () => {
