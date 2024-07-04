@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socket = io('http://api-1-nh7w.onrender.com', {
+const socket = io('https://api-1-nh7w.onrender.com', {
   path: '/comandos',
 });
 
