@@ -1,6 +1,8 @@
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001');
+const socket = io('http://localhost:3001', {
+  transports: ['websocket'], // Especifica el transporte que deseas usar
+});
 
 const Api = {
   obtenerRegistros: () => {
